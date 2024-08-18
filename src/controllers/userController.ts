@@ -1,5 +1,12 @@
 import { User } from '../models/User'
 import { Request, Response } from 'express'
+import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
+import dotenv from 'dotenv'
+
+dotenv.config()
+
+const SECRET_KEY = process.env.JWT_SECRET as string
 
 export const listUsers = async (req: any, res: any) => {
   console.log('Accessing listUsers')
@@ -45,5 +52,26 @@ export const deleteUserById = async (req: any, res: any) => {
     res.json({ message: 'User deleted successfully' })
   } catch (error) {
     res.status(500).json({ message: 'Error deleting user', error })
+  }
+}
+
+export const loginUser = async (req: Request, res: Response) => {
+  const { email, password } = req.body
+  try {
+    const user = await User.findOne({ email })
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' })
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password)
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Invalid credentials' })
+    }
+
+    const token = jwt.sign({ id: user._id }, SECRET_KEY, { expiresIn: '1h' })
+    res.json({ token })
+  } catch (error: any) {
+    console.error('Login error:', error) // Log detalhado do erro
+    res.status(500).json({ message: 'Server error', error: error.message || 'Unknown error' })
   }
 }
