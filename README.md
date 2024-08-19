@@ -2,6 +2,11 @@
 
 Este repositório contém o backend para o sistema de chat em tempo real. O servidor gerencia autenticações, mantém o estado dos usuários e gerencia as mensagens entre os usuários em tempo real usando WebSockets.
 
+**Deploy efetuado para testes de API na plataforma [RailWay](https://railway.app/).
+## Visite para testar -> [RailWay - BackEnd - IXC](backend-ixc-production.up.railway.app) Para testar as funcionalidades.
+OBS: Caso encontre algum problema, nos reporte.
+
+
 ## Tecnologias
 
 Este projeto utiliza várias tecnologias chave para operar eficientemente:
