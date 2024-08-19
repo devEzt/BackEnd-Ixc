@@ -9,7 +9,7 @@ dotenv.config()
 
 const SECRET_KEY = process.env.JWT_SECRET as string
 
-export const listUsers = async (req: any, res: any) => {
+export const listUsers = async (req: Request, res: Response) => {
   try {
     const users = await User.find({})
     res.json(users)
@@ -18,7 +18,7 @@ export const listUsers = async (req: any, res: any) => {
   }
 }
 
-export const createUser = async (req: any, res: any) => {
+export const createUser = async (req: Request, res: Response) => {
   const { name, email, password } = req.body
   try {
     const newUser = new User({ name, email, password })
@@ -41,7 +41,7 @@ export const getUserById = async (req: Request, res: Response) => {
   }
 }
 
-export const deleteUserById = async (req: any, res: any) => {
+export const deleteUserById = async (req: Request, res: Response) => {
   try {
     const result = await User.findByIdAndDelete(req.params.id)
     if (!result) {
