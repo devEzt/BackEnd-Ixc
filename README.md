@@ -56,7 +56,7 @@ npm start
 
 ## Banco de Dados
 
-O teste me auxilio no aprimoramento de meu conhecimento técnico sobre Node e Api's no geral, buscando as libs atuais para conseguir o melhor resultado.
+O teste me auxiliou no aprimoramento de meu conhecimento técnico sobre Node e Api's no geral, buscando as libs atuais para conseguir o melhor resultado.
 
 ## Link repositório Front-end: 
 
