@@ -12,7 +12,6 @@ export default function initSocket(server: any) {
   })
 
   io.on('connection', (socket) => {
-    console.log('New client connected: ' + socket.id)
     socket.on('sendMessage', (message) => {
       io.emit('receiveMessage', message)
     })

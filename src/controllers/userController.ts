@@ -10,14 +10,11 @@ dotenv.config()
 const SECRET_KEY = process.env.JWT_SECRET as string
 
 export const listUsers = async (req: any, res: any) => {
-  console.log('Accessing listUsers')
   try {
     const users = await User.find({})
-    console.log('Users found:', users)
     res.json(users)
   } catch (error) {
-    console.log('Error in listUsers:', error)
-    res.status(500).json({ message: 'Error fetching users', error })
+    res.status(500).json({ message: 'Erro ao Listar Usuários', error })
   }
 }
 
@@ -26,9 +23,9 @@ export const createUser = async (req: any, res: any) => {
   try {
     const newUser = new User({ name, email, password })
     await newUser.save()
-    res.status(201).json({ message: 'User created successfully', user: newUser })
+    res.status(201).json({ message: 'Usuário criado com sucesso', user: newUser })
   } catch (error) {
-    res.status(500).json({ message: 'Error creating user', error })
+    res.status(500).json({ message: 'Erro ao criar Usuário', error })
   }
 }
 
@@ -36,11 +33,11 @@ export const getUserById = async (req: Request, res: Response) => {
   try {
     const user = await User.findById(req.params.id)
     if (!user) {
-      return res.status(404).json({ message: 'User not found' })
+      return res.status(404).json({ message: 'Usuário não encontrado' })
     }
     res.json(user)
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching user', error })
+    res.status(500).json({ message: 'Erro ao Procurar Usuário', error })
   }
 }
 
@@ -48,11 +45,11 @@ export const deleteUserById = async (req: any, res: any) => {
   try {
     const result = await User.findByIdAndDelete(req.params.id)
     if (!result) {
-      return res.status(404).json({ message: 'User not found' })
+      return res.status(404).json({ message: 'Erro usuário não encontrado' })
     }
-    res.json({ message: 'User deleted successfully' })
+    res.json({ message: 'Usuário Deletado com Sucesso.' })
   } catch (error) {
-    res.status(500).json({ message: 'Error deleting user', error })
+    res.status(500).json({ message: 'Erro ao Deletar Usuário', error })
   }
 }
 
@@ -63,12 +60,12 @@ export const loginUser = async (req: Request, res: Response) => {
     const io = getIO()
 
     if (!user) {
-      return res.status(404).json({ message: 'User not found' })
+      return res.status(404).json({ message: 'Usuário não encontrado.' })
     }
 
     const isMatch = await bcrypt.compare(password, user.password)
     if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid credentials' })
+      return res.status(400).json({ message: 'Credenciais invalidas' })
     }
 
     const updatedUser = await User.findByIdAndUpdate(user._id, { status: 'online' }, { new: true })
@@ -90,9 +87,9 @@ export const updateUserStatus = async (req: Request, res: Response) => {
   try {
     const updatedUser = await User.findByIdAndUpdate(userId, { status }, { new: true })
     if (!updatedUser) {
-      return res.status(404).json({ message: 'User not found' })
+      return res.status(404).json({ message: 'Usuário não encontrado.' })
     }
-    res.json({ message: 'User status updated', user: updatedUser })
+    res.json({ message: 'Usuário atualizado', user: updatedUser })
   } catch (error) {
     res.status(500).json({ message: 'Error updating user status', error })
   }
@@ -108,9 +105,9 @@ export const logoutUser = async (req: Request, res: Response) => {
     io.emit('userStatusChanged', { userId: updatedUser?._id, status: 'offline' })
 
     if (!updatedUser) {
-      return res.status(404).json({ message: 'User not found' })
+      return res.status(404).json({ message: 'Usuário não encontrado.' })
     }
-    res.json({ message: 'User logged out successfully', user: updatedUser })
+    res.json({ message: 'Usuário online', user: updatedUser })
   } catch (error) {
     res.status(500).json({ message: 'Error logging out user', error })
   }

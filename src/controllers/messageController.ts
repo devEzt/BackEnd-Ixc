@@ -22,7 +22,7 @@ export const getMessages = async (req: Request, res: Response) => {
     const messages = await Message.find({})
     res.json(messages)
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching messages', error })
+    res.status(500).json({ message: 'Erro ao buscar Mensagens', error })
   }
 }
 
@@ -37,9 +37,9 @@ export const createMessage = async (req: Request, res: Response) => {
     io.to(sender).emit('newMessage', newMessage)
     io.to(receiver).emit('newMessage', newMessage)
 
-    res.status(201).json({ message: 'Message created successfully', newMessage })
+    res.status(201).json({ message: 'Mensagem Criada com Sucesso', newMessage })
   } catch (error) {
-    res.status(500).json({ message: 'Error creating message', error })
+    res.status(500).json({ message: 'Erro ao criar mensagem', error })
   }
 }
 
