@@ -53,10 +53,10 @@ npm start
 
 O teste me auxilio no aprimoramento de meu conhecimento técnico sobre Node e Api's no geral, buscando as libs atuais para conseguir o melhor resultado.
 
-## Link repositório Server: 
+## Link repositório Front-end: 
 
 ```bash
- https://github.com/devEzt/BackEnd-Ixc
+ https://github.com/devEzt/frontend-ixc
 ```
 
 Este README oferece uma visão geral clara do projeto, incluindo como configurar e executar o projeto localmente. As seções estão bem organizadas para facilitar a leitura e compreensão dos usuários que desejam usar ou contribuir para o projeto.
