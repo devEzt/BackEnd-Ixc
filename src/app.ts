@@ -13,7 +13,7 @@ app.use(express.json())
 
 app.use(
   cors({
-    origin: 'http://localhost:3000',
+    origin: 'https://frontend-gon0auwk9-alexandre-maciels-projects.vercel.app/',
   })
 )
 
