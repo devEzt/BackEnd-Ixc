@@ -37,6 +37,12 @@ Use o NPM para instalar todas as dependencias.
 npm install
 ```
 
+## Run para montar o Dist via Nodemon
+
+```bash
+npm run dev
+```
+
 ## Run
 
 ```bash
