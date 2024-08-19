@@ -3,6 +3,7 @@ import { Request, Response } from 'express'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
+import { getIO } from '../services/socket'
 
 dotenv.config()
 
@@ -59,6 +60,8 @@ export const loginUser = async (req: Request, res: Response) => {
   const { email, password } = req.body
   try {
     const user = await User.findOne({ email })
+    const io = getIO()
+
     if (!user) {
       return res.status(404).json({ message: 'User not found' })
     }
@@ -68,10 +71,47 @@ export const loginUser = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Invalid credentials' })
     }
 
+    const updatedUser = await User.findByIdAndUpdate(user._id, { status: 'online' }, { new: true })
+
+    io.emit('userStatusChanged', { userId: updatedUser?._id, status: 'online' })
+
     const token = jwt.sign({ userId: user._id }, SECRET_KEY, { expiresIn: '1h' })
-    res.json({ token, userId: user._id.toString() })
+    res.json({ token, userId: updatedUser?._id.toString(), status: updatedUser?.status })
   } catch (error: any) {
     console.error('Login error:', error)
     res.status(500).json({ message: 'Server error', error: error.message || 'Unknown error' })
+  }
+}
+
+export const updateUserStatus = async (req: Request, res: Response) => {
+  const { userId } = req.params
+  const { status } = req.body
+
+  try {
+    const updatedUser = await User.findByIdAndUpdate(userId, { status }, { new: true })
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' })
+    }
+    res.json({ message: 'User status updated', user: updatedUser })
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating user status', error })
+  }
+}
+
+export const logoutUser = async (req: Request, res: Response) => {
+  const { userId } = req.body
+
+  try {
+    const io = getIO()
+
+    const updatedUser = await User.findByIdAndUpdate(userId, { status: 'offline' }, { new: true })
+    io.emit('userStatusChanged', { userId: updatedUser?._id, status: 'offline' })
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' })
+    }
+    res.json({ message: 'User logged out successfully', user: updatedUser })
+  } catch (error) {
+    res.status(500).json({ message: 'Error logging out user', error })
   }
 }
