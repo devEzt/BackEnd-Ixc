@@ -68,10 +68,10 @@ export const loginUser = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Invalid credentials' })
     }
 
-    const token = jwt.sign({ id: user._id }, SECRET_KEY, { expiresIn: '1h' })
-    res.json({ token })
+    const token = jwt.sign({ userId: user._id }, SECRET_KEY, { expiresIn: '1h' })
+    res.json({ token, userId: user._id.toString() })
   } catch (error: any) {
-    console.error('Login error:', error) // Log detalhado do erro
+    console.error('Login error:', error)
     res.status(500).json({ message: 'Server error', error: error.message || 'Unknown error' })
   }
 }
