@@ -1,27 +1,32 @@
 import { Server as SocketIOServer } from 'socket.io'
+import { DefaultEventsMap } from 'socket.io/dist/typed-events'
+
+let io: SocketIOServer<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>
 
 export default function initSocket(server: any) {
-  const io = new SocketIOServer(server, {
+  io = new SocketIOServer(server, {
     cors: {
-      origin: '*', // Ajuste as políticas de CORS conforme necessário
+      origin: '*',
       methods: ['GET', 'POST'],
     },
   })
 
-  // Ouvinte para conexão de novos clientes
   io.on('connection', (socket) => {
     console.log('New client connected: ' + socket.id)
-
-    // Ouvinte para receber mensagens e emitir para todos os clientes conectados
     socket.on('sendMessage', (message) => {
       io.emit('receiveMessage', message)
     })
-
-    // Ouvinte para desconexao de clientes
     socket.on('disconnect', () => {
       console.log('Client disconnected: ' + socket.id)
     })
   })
 
+  return io
+}
+
+export function getIO() {
+  if (!io) {
+    throw new Error('Socket.io not initialized')
+  }
   return io
 }
